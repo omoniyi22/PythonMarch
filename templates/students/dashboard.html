@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Dashboard</h1>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Students</h5>
+                <h2 class="card-text">{{ total_students }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Total Courses</h5>
+                <h2 class="card-text">{{ total_courses }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Departments</h5>
+                <h2 class="card-text">{{ total_departments }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Students per Department -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Students per Department</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Department</th>
+                            <th>Number of Students</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dept in dept_stats %}
+                        <tr>
+                            <td>{{ dept.name }}</td>
+                            <td>{{ dept.student_count }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-center">No data available</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Enrollments -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Enrollments</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Course</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for enrollment in recent_enrollments %}
+                        <tr>
+                            <td>{{ enrollment.student.get_full_name }}</td>
+                            <td>{{ enrollment.course.code }}</td>
+                            <td>{{ enrollment.enrollment_date|date:"M d, Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center">No recent enrollments</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <a href="{% url 'student_add' %}" class="btn btn-primary">Add New Student</a>
+                <a href="{% url 'course_add' %}" class="btn btn-success">Add New Course</a>
+                <a href="{% url 'enroll_student' %}" class="btn btn-info">Enroll Student</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

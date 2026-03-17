@@ -1,0 +1,14 @@
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+
+
+
+echo "# PythonMarch" >> README.md
+Step 1 git init
+Step 2 git remote add origin https://github.com/omoniyi22/PythonMarch.git
+
+Step 3 git add .
+Step 4 git commit -m "first commit"
+Step 5 git status
+
+Step 6 git push -u origin master
