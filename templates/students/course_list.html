@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Courses</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'course_add' %}" class="btn btn-sm btn-primary">
+            + Add New Course
+        </a>
+    </div>
+</div>
+
+<!-- Filter -->
+<div class="row mb-3">
+    <div class="col-md-4 ms-auto">
+        <form method="get" id="filter-form">
+            <select name="department" class="form-select" onchange="this.form.submit()">
+                <option value="">All Departments</option>
+                {% for dept in departments %}
+                <option value="{{ dept.id }}" {% if dept_filter == dept.id|stringformat:"i" %}selected{% endif %}>
+                    {{ dept.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+</div>
+
+<!-- Courses Grid -->
+<div class="row">
+    {% for course in courses %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">{{ course.code }}</h5>
+            </div>
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">{{ course.name }}</h6>
+                <p class="card-text">{{ course.description|truncatewords:30 }}</p>
+                
+                <table class="table table-sm table-borderless">
+                    <tr>
+                        <th width="100">Credits:</th>
+                        <td>{{ course.credits }}</td>
+                    </tr>
+                    <tr>
+                        <th>Instructor:</th>
+                        <td>{{ course.instructor }}</td>
+                    </tr>
+                    <tr>
+                        <th>Department:</th>
+                        <td>{{ course.department.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Semester:</th>
+                        <td>{{ course.semester }}</td>
+                    </tr>
+                    <tr>
+                        <th>Students:</th>
+                        <td>
+                            <span class="badge bg-info">
+                                {{ course.student_count }} enrolled
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'course_detail' course.pk %}" class="btn btn-sm btn-info">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            No courses found.
+            <a href="{% url 'course_add' %}" class="alert-link">Add your first course</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

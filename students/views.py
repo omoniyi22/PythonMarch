@@ -35,34 +35,37 @@ def dashboard(request):
 # Student Views
 @login_required
 def student_list(request):
-    """List all students with search and filter"""
-    students = Student.objects.select_related('department').all()
+    # Get all students
+    students = Student.objects.all()
     
-    # Search functionality
+    # Filter out records with None/empty pk
+    students = [student for student in students if student.pk is not None]
+    
+    # Your existing search and filter logic...
     search_query = request.GET.get('search', '')
+    department_filter = request.GET.get('department', '')
+    
     if search_query:
-        students = students.filter(
-            Q(first_name__icontains=search_query) |
-            Q(last_name__icontains=search_query) |
-            Q(student_id__icontains=search_query) |
-            Q(email__icontains=search_query)
-        )
+        students = [s for s in students if 
+                   search_query.lower() in s.get_full_name().lower() or
+                   search_query.lower() in s.email.lower() or
+                   search_query.lower() in (s.student_id or '').lower()]
     
-    # Filter by department
-    dept_filter = request.GET.get('department', '')
-    if dept_filter:
-        students = students.filter(department_id=dept_filter)
+    if department_filter:
+        students = [s for s in students if 
+                   s.department and str(s.department.id) == department_filter]
     
+    # Get departments for filter dropdown
     departments = Department.objects.all()
     
     context = {
         'students': students,
-        'departments': departments,
         'search_query': search_query,
-        'dept_filter': dept_filter,
+        'department_filter': department_filter,
+        'departments': departments,
     }
+    
     return render(request, 'students/student_list.html', context)
-
 @login_required
 def student_detail(request, pk):
     """View student details with their enrollments"""
