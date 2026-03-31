@@ -1,0 +1,14 @@
+Only once per project
+
+git init
+git remote add origin https://github.com/omoniyi22/newrepo.git
+
+
+Subsequent update
+git status 
+git add .
+git commit -m "Your comment"
+git push origin master
+
+
+git clone https://github.com/omoniyi22/pythonMarch.git
