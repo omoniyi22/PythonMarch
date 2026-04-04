@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-o$rt_t9bam3ip&jrw1zk&(s$tvj-v9k_h**d=ol%@=5!wa*lmd
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "pythonmarch.onrender.com",
+    "https://pythonmarch.onrender.com",
     "localhost",
     "127.0.0.1",
 ]
